@@ -1,0 +1,264 @@
+<mvc:View height="100%" xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:com="sap.suite.ui.commons"
+	xmlns:viz.data="sap.viz.ui5.data" xmlns:viz="sap.viz.ui5.controls" xmlns:l="sap.ui.layout" xmlns:mic="sap.suite.ui.microchart"
+	xmlns:viz.feeds="sap.viz.ui5.controls.common.feeds" controllerName="lhsusextaction.controller.Detail" xmlns:semantic="sap.m.semantic"
+	xmlns:f="sap.ui.layout.form" xmlns:tnt="sap.tnt" displayBlock="true">
+	<Page id="idPage" title="{GlobalTrackerModel>/ClientName} oVo Action Tracker" navButtonPress="onNavBack" showNavButton="false">
+		<content>
+			<Panel width="auto">
+				<headerToolbar>
+					<Toolbar height="3rem">
+						<Title text="Customer:"/>
+						<ComboBox id="customerSelect" items="{GlobalTrackerModel>/CustomerID}" selectedKey="All" selectionChange="handleCustomerChange">
+							<core:Item key="{GlobalTrackerModel>key}" text="{GlobalTrackerModel>name}"/>
+						</ComboBox>
+						<!--<Text id="updateText" />
+						<Button icon="sap-icon://refresh" type="Default" tooltip="Refresh" press="onRefresh" />-->
+					</Toolbar>
+				</headerToolbar>
+				<l:Splitter height="500px" orientation="Horizontal">
+					<com:ChartContainer id="idChartContainer" showZoom="false" showFullScreen="true" showPersonalization="false" autoAdjustHeight="true"
+						showLegend="true">
+						<com:dimensionSelectors>
+							<Label text="Value Label:" design="Bold"/>
+							<Switch state="true" id="chart1ShowData" change="onPriorityShowLabel">
+								<layoutData>
+									<FlexItemData growFactor="1"/>
+								</layoutData>
+							</Switch>
+							<Label text="Show Percentage:" design="Bold"/>
+							<Switch state="false" id="chart1Per" change="onPriorityShowValue">
+								<layoutData>
+									<FlexItemData growFactor="1"/>
+								</layoutData>
+							</Switch>
+						</com:dimensionSelectors>
+						<com:content>
+							<com:ChartContainerContent icon="sap-icon://line-chart" title="oVo Certification Exam Stats">
+								<com:content>
+									<viz:Popover id="idPopover1"/>
+									<viz:VizFrame id="idVizframe1" height="550px" uiConfig="{applicationSet:'fiori'}" selectData="myOnClickHandler"
+										vizProperties="{title: {text: 'Open Actions by Priority'}, legend: {title: {visible: true} } }" vizType="donut">
+										<viz:dataset>
+											<viz.data:FlattenedDataset data="{/PriorityCollection}">
+												<viz.data:dimensions>
+													<viz.data:DimensionDefinition name="Priority" value="{Priority}"/>
+												</viz.data:dimensions>
+												<viz.data:measures>
+													<viz.data:MeasureDefinition name="Total" value="{path: 'Total', type: 'sap.ui.model.type.Integer'}"/>
+												</viz.data:measures>
+											</viz.data:FlattenedDataset>
+										</viz:dataset>
+										<viz:feeds>
+											<viz.feeds:FeedItem uid="color" type="Dimension" values="Priority"/>
+											<viz.feeds:FeedItem uid="size" type="Measure" values="Total"/>
+										</viz:feeds>
+									</viz:VizFrame>
+								</com:content>
+							</com:ChartContainerContent>
+						</com:content>
+					</com:ChartContainer>
+					<com:ChartContainer showFullScreen="true" showZoom="false" showPersonalization="false" autoAdjustHeight="true" showLegend="true">
+						<com:dimensionSelectors>
+							<Label text="Value Label:" design="Bold"/>
+							<Switch state="true" id="chart2ShowData" change="onStateShowLabel">
+								<layoutData>
+									<FlexItemData growFactor="1"/>
+								</layoutData>
+							</Switch>
+							<Label text="Show Percentage:" design="Bold"/>
+							<Switch state="false" id="chart2Per" change="onStateShowValue">
+								<layoutData>
+									<FlexItemData growFactor="1"/>
+								</layoutData>
+							</Switch>
+						</com:dimensionSelectors>
+						<com:content>
+							<com:ChartContainerContent icon="sap-icon://line-chart">
+								<com:content>
+									<viz:Popover id="idPopover2"/>
+									<viz:VizFrame height="600px" id="idVizframe2" uiConfig="{applicationSet:'fiori'}" selectData="myOnClickHandler"
+										vizProperties="{title: {text: 'All Actions by State'}, legend: {title: {visible: true} } }" vizType="donut">
+										<viz:dataset>
+											<viz.data:FlattenedDataset data="{/StateIDCollection}">
+												<viz.data:dimensions>
+													<viz.data:DimensionDefinition name="State" value="{State}"/>
+												</viz.data:dimensions>
+												<viz.data:measures>
+													<viz.data:MeasureDefinition name="Total" value="{Total}"/>
+												</viz.data:measures>
+											</viz.data:FlattenedDataset>
+										</viz:dataset>
+										<viz:feeds>
+											<viz.feeds:FeedItem uid="color" type="Dimension" values="State"/>
+											<viz.feeds:FeedItem uid="size" type="Measure" values="Total"/>
+										</viz:feeds>
+									</viz:VizFrame>
+								</com:content>
+							</com:ChartContainerContent>
+						</com:content>
+					</com:ChartContainer>
+				</l:Splitter>
+			</Panel>
+			<Panel width="auto" class="sapUiResponsiveMargin">
+				<headerToolbar>
+					<Toolbar height="3rem">
+						<Title text="Priority 1 Open items"/>
+					</Toolbar>
+				</headerToolbar>
+				<Table inset="false" items="{/ItemsCollection}">
+					<columns>
+						<Column width="10em">
+							<Text text="Request Number"/>
+						</Column>
+						<Column minScreenWidth="Tablet" width="12em" demandPopin="true">
+							<Text text="Description"/>
+						</Column>
+						<Column minScreenWidth="Tablet" demandPopin="true" hAlign="Center">
+							<Text text="Created On"/>
+						</Column>
+						<Column minScreenWidth="Tablet" demandPopin="true" hAlign="Center">
+							<Text text="Due Date"/>
+						</Column>
+						<Column minScreenWidth="Tablet" demandPopin="true" hAlign="Center">
+							<Text text="Status"/>
+						</Column>
+						<Column minScreenWidth="Tablet" demandPopin="true" hAlign="Center">
+							<Text text="Assigned To"/>
+						</Column>
+						<Column hAlign="Center">
+							<Text text="Functional Area"/>
+						</Column>
+					</columns>
+					<items>
+						<ColumnListItem>
+							<cells>
+								<Link text="{TicketNumber}" emphasized="false" href="{path: 'TicketID', formatter: '.formatter.getUrl'}" target="_blank"/>
+								<Text text="{Title}"/>
+								<Text text="{path: 'Created', formatter: '.formatter.dateFormat'}"/>
+								<Text text="{path: 'DynamicField', formatter: '.formatter.dueDate'}"/>
+								<Text text="{State}"/>
+								<Text text="{Owner}"/>
+								<Text text="{path: 'DynamicField', formatter: '.formatter.getSourceProcess'}"/>
+							</cells>
+						</ColumnListItem>
+					</items>
+				</Table>
+			</Panel>
+			<Panel width="auto" class="sapUiResponsiveMargin">
+				<headerToolbar>
+					<Toolbar height="3rem">
+						<Title text="Top Strategic Items" level="H2"/>
+					</Toolbar>
+				</headerToolbar>
+				<Table inset="false" items="{/DataCollection}">
+					<columns>
+						<Column width="10em">
+							<Text text="Request Number"/>
+						</Column>
+						<Column minScreenWidth="Tablet" width="12em" demandPopin="true">
+							<Text text="Description"/>
+						</Column>
+						<Column minScreenWidth="Tablet" demandPopin="true" hAlign="Center">
+							<Text text="Created On"/>
+						</Column>
+						<Column minScreenWidth="Tablet" demandPopin="true" hAlign="Center">
+							<Text text="Due Date"/>
+						</Column>
+						<Column minScreenWidth="Tablet" demandPopin="true" hAlign="Center">
+							<Text text="Status"/>
+						</Column>
+						<Column minScreenWidth="Tablet" demandPopin="true" hAlign="Center">
+							<Text text="Assigned To"/>
+						</Column>
+						<Column hAlign="Center">
+							<Text text="Functional Area"/>
+						</Column>
+					</columns>
+					<items>
+						<ColumnListItem>
+							<cells>
+								<Link text="{TicketNumber}" emphasized="false" href="{path: 'TicketID', formatter: '.formatter.getUrl'}" target="_blank"/>
+								<Text text="{Title}"/>
+								<Text text="{path: 'Created', formatter: '.formatter.dateFormat'}"/>
+								<Text text="{path: 'DynamicField', formatter: '.formatter.dueDate'}"/>
+								<Text text="{State}"/>
+								<Text text="{Owner}"/>
+								<Text text="{path: 'DynamicField', formatter: '.formatter.getSourceProcess'}"/>
+							</cells>
+						</ColumnListItem>
+					</items>
+				</Table>
+			</Panel>
+			<Panel width="auto" class="sapUiResponsiveMargin">
+				<headerToolbar>
+					<Toolbar height="3rem">
+						<Title text="Cost Avoidance"/>
+					</Toolbar>
+				</headerToolbar>
+				<f:SimpleForm id="SimpleFormDisplay354" editable="false" layout="ResponsiveGridLayout" labelSpanXL="3" labelSpanL="3" labelSpanM="3"
+					labelSpanS="12" adjustLabelSpan="false" emptySpanXL="4" emptySpanL="4" emptySpanM="4" emptySpanS="0" columnsXL="1" columnsL="1" columnsM="1"
+					singleContainerFullSize="false">
+					<f:content>
+						<Label text="Cost Avoid"/>
+						<Text id="costAvoid" text="{/CostAvoid}"/>
+					</f:content>
+				</f:SimpleForm>
+			</Panel>
+			<Panel width="auto" class="sapUiResponsiveMargin">
+				<headerToolbar>
+					<Toolbar height="3rem">
+						<Title text="Value Opportunity"/>
+					</Toolbar>
+				</headerToolbar>
+				<com:ChartContainer showFullScreen="true" showZoom="false" showPersonalization="false" autoAdjustHeight="false" showLegend="true">
+					<com:dimensionSelectors>
+						<Label text="Value Label:" design="Bold"/>
+						<Switch state="true" id="chart3ShowData" change="onValueOppShowLabel">
+							<layoutData>
+								<FlexItemData growFactor="1"/>
+							</layoutData>
+						</Switch>
+						<Label text="Show Percentage:" design="Bold"/>
+						<Switch state="false" id="chart3Per" change="onValueOppShowValue">
+							<layoutData>
+								<FlexItemData growFactor="1"/>
+							</layoutData>
+						</Switch>
+					</com:dimensionSelectors>
+					<com:content>
+						<com:ChartContainerContent icon="sap-icon://line-chart" title="oVo Certification Exam Stats">
+							<com:content>
+								<viz:Popover id="idPopover3"></viz:Popover>
+								<viz:VizFrame id="idVizframe3" vizProperties="{title: {text: 'Value Opportunity Chart'}, legend: {title: {visible: true} } }"
+									uiConfig="{applicationSet:'fiori'}" height="500px" vizType='pie'>
+									<viz:dataset>
+										<viz.data:FlattenedDataset data="{/ValueOppCollection}">
+											<viz.data:dimensions>
+												<viz.data:DimensionDefinition name="Name" value="{path: 'Name', formatter: '.formatter.valueOppFormat'}"/>
+											</viz.data:dimensions>
+											<viz.data:measures>
+												<viz.data:MeasureDefinition name="Total" value="{Total}"/>
+											</viz.data:measures>
+										</viz.data:FlattenedDataset>
+									</viz:dataset>
+									<viz:feeds>
+										<viz.feeds:FeedItem uid="size" type="Measure" values="Total"/>
+										<viz.feeds:FeedItem uid="color" type="Dimension" values="Name"/>
+									</viz:feeds>
+								</viz:VizFrame>
+							</com:content>
+						</com:ChartContainerContent>
+					</com:content>
+				</com:ChartContainer>
+			</Panel>
+		</content>
+		<footer>
+			<OverflowToolbar id="otbFooter">
+				<ToolbarSpacer/>
+				<Button type="Emphasized" icon="sap-icon://print" text="Print" press="onPDFPressed">
+					<layoutData><OverflowToolbarLayoutData/></layoutData>
+				</Button>
+			</OverflowToolbar>
+		</footer>
+	</Page>
+</mvc:View>

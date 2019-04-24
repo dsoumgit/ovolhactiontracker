@@ -1,0 +1,22 @@
+<mvc:View xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m"
+	controllerName="lhsusextaction.controller.Master" xmlns:html="http://www.w3.org/1999/xhtml">
+	<Page id="app" title="Menu" showHeader="true">
+		<content>
+			<!--<Panel expandable="true" expanded="true" width="auto" class="sapUiResponsiveMargin">
+				<headerToolbar>
+					<Toolbar height="3rem">
+						<Title text="About"/>
+					</Toolbar>
+				</headerToolbar>
+				<content>-->
+					<List>
+						<items>
+							<StandardListItem title="Contact Us" type="Navigation" press="onContactPress"/>
+							<StandardListItem title="Information" type="Navigation" press="onInfoPress"/>
+						</items>
+					</List>
+				<!--</content>
+			</Panel>-->
+		</content>
+	</Page>
+</mvc:View>
